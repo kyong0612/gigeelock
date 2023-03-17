@@ -1,2 +1,2 @@
-run:
-	go build && ./gigeelock
+run-test:
+	go build && ./gigeelock test
