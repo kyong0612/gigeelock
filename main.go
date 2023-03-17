@@ -1,19 +1,49 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gordonklaus/portaudio"
 )
 
+var (
+	sigs = make(chan os.Signal, 1)
+	done = make(chan bool, 1)
+)
+
+func init() {
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		sig := <-sigs
+		fmt.Println("###############")
+		fmt.Println(sig)
+		done <- true
+		fmt.Println("exiting")
+	}()
+}
+
 func main() {
+
+	fmt.Println("#### start audio ####")
+
+	// portauido
 	portaudio.Initialize()
 	defer portaudio.Terminate()
 	e := newEcho(time.Second / 3)
 	defer e.Close()
+
 	chk(e.Start())
-	time.Sleep(4 * time.Second)
+
+	<-done
+
 	chk(e.Stop())
+	fmt.Println("#### echo stopping ####")
+
 }
 
 type echo struct {
