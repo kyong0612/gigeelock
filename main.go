@@ -3,15 +3,25 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"time"
 
 	"github.com/gordonklaus/portaudio"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Print("Error loading .env file")
+	}
+
+	apiKey := os.Getenv("OPEN_AI_API_KEY")
+
 	if len(os.Args) < 2 {
 		os.Args[1] = time.Now().Format(time.RFC3339Nano)
 	}

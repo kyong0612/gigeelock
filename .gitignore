@@ -17,3 +17,4 @@
 gigeelock
 tmp
 .DS_Store
+.env
