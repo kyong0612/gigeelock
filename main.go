@@ -6,14 +6,14 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+	"time"
 
 	"github.com/gordonklaus/portaudio"
 )
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("missing required argument:  output file name")
-		return
+		os.Args[1] = time.Now().Format(time.RFC3339Nano)
 	}
 	fmt.Println("Recording.  Press Ctrl-C to stop.")
 

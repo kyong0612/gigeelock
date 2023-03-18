@@ -1,5 +1,5 @@
-run-test:
-	go build && ./gigeelock test
+run:
+	go build && ./gigeelock
 
 open-test:
 	open ./tmp/test.aiff
