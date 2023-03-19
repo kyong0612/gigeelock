@@ -42,9 +42,6 @@ func (api *API) parseTemplates() *template.Template {
 	t := template.New("root").Funcs(funcmap)
 	root := "templates"
 	err := fs.WalkDir(api.templateFS, root, func(path string, info fs.DirEntry, err error) error {
-
-		fmt.Println("path:", path)
-
 		if err != nil {
 			return err
 		}
