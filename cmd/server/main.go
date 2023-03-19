@@ -48,6 +48,7 @@ func main() {
 	}()
 
 	fmt.Println("🚀 Server is running on port 3333... (press ctrl+c to shutdown gracefully)")
+	fmt.Println("http://localhost:3333/record")
 
 	// Run the server
 	err := server.ListenAndServe()
