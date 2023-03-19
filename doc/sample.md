@@ -1,13 +1,16 @@
 # curl sample
 ### whisper
-see: https://openai.com/blog/introducing-chatgpt-and-whisper-apis
+see: https://openai.com/blog/introducing-chatgpt-and-whisper-apis 
+see: https://platform.openai.com/docs/guides/speech-to-text
 ```
-curl https://api.openai.com/v1/audio/transcriptions \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "Content-Type: multipart/form-data" \
-  -F model="whisper-1" \
-  -F file="@/path/to/file/openai.mp3"
+curl --request POST \
+    --url https://api.openai.com/v1/audio/transcriptions \
+    --header 'Authorization: Bearer TOKEN' \
+    --header 'Content-Type: multipart/form-data' \
+    --form file=@/tmp/target.mp3 \
+    --form model=whisper-1
 ```
+
 
 ### chat-gpt
 see: https://dev.classmethod.jp/articles/chatgpt-api-first-step-for-beginners/
