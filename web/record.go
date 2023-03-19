@@ -1,7 +1,13 @@
 package web
 
-import "net/http"
+import (
+	"net/http"
+)
 
-func RecorderHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World!"))
+func (api *API) RecorderHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	if err := api.getTemplate(ctx, "web/record").Execute(w, nil); err != nil {
+		panic(err)
+	}
 }

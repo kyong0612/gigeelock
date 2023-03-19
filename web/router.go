@@ -1,22 +1,34 @@
 package web
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func Service() http.Handler {
+func Service(api *API) http.Handler {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
+	middleware.DefaultLogger = middleware.RequestLogger(
+		&middleware.DefaultLogFormatter{
+			Logger: newLogger(),
+		},
+	)
 	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+	r.Use(PanicHandler)
+	r.Use(middleware.Timeout(60 * time.Second))
 
-	r.Get("/record", RecorderHandler)
+	r.Get("/health", healthCheckHandler)
+
+	r.Get("/record", api.RecorderHandler)
 
 	r.Get("/slow", func(w http.ResponseWriter, r *http.Request) {
 		// Simulates some hard work.
@@ -32,4 +44,21 @@ func Service() http.Handler {
 	})
 
 	return r
+}
+func newLogger() *log.Logger {
+	return log.New(os.Stdout, "chi-log: ", log.Lshortfile)
+}
+
+func RenderJSON(w http.ResponseWriter, status int, v interface{}) {
+	buf := &bytes.Buffer{}
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(false)
+	if err := enc.Encode(v); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write(buf.Bytes())
 }

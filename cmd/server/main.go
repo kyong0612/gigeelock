@@ -14,10 +14,14 @@ import (
 )
 
 func main() {
+
+	// new api
+	api := web.NewAPI()
+
 	// The HTTP Server
 	server := &http.Server{
 		Addr:    "0.0.0.0:3333",
-		Handler: web.Service(),
+		Handler: web.Service(api),
 	}
 
 	// Server run context
