@@ -1,5 +1,9 @@
 run:
 	go build -o gigeelock cmd/server/main.go && ./gigeelock
+
+run-sample:
+	go run cmd/sample/main.go
+
 open-test:
 	open ./tmp/test.aiff
 
