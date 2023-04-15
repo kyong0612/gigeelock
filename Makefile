@@ -1,4 +1,6 @@
 include .env
+NOW := $(shell date +%s)
+
 
 run:
 	go build -o gigeelock cmd/server/main.go && ./gigeelock
@@ -14,8 +16,8 @@ curl-whisper:
     --url https://api.openai.com/v1/audio/transcriptions \
     --header 'Authorization: Bearer $(OPENAI_API_KEY)' \
     --header 'Content-Type: multipart/form-data' \
-    --form file=/tmp/target.mp3 \
-    --form model=whisper-1
+    --form file=@$(TARGET_PATH) \
+    --form model=whisper-1 >> ./tmp/$(NOW).txt
 
 list-model:
 	curl https://api.openai.com/v1/models \
